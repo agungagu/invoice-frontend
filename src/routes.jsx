@@ -11,6 +11,7 @@ import ProductPage from "./pages/product/page/ProductPage";
 import ReportPage from "./pages/report/page/ReportPage";
 import SettingPage from "./pages/setting/page/SettingPage";
 import HomePage from "./pages/home/page/HomePage";
+import Dashboard from "./pages/home/page/HomePage";
 
 const router = createBrowserRouter([
   {
@@ -31,7 +32,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <HomePage />,
+        element: <Dashboard />,
       },
       {
         path: "customer",
