@@ -1,5 +1,16 @@
-import { Outlet, NavLink } from "react-router-dom";
-import { User, Bell, DollarSign, Users, FileText, BarChart, Settings, Package, Pause } from "lucide-react";
+import { Outlet, NavLink, useNavigate } from "react-router-dom";
+import {
+  User,
+  Bell,
+  DollarSign,
+  Users,
+  FileText,
+  BarChart,
+  Settings,
+  Package,
+  Pause,
+  LogOut,
+} from "lucide-react";
 
 const navItems = [
   { name: "Dashboard", icon: <BarChart size={18} />, path: "/admin" },
@@ -11,6 +22,13 @@ const navItems = [
 ];
 
 const AdminLayout = () => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // atau panggil context logout()
+    navigate("/", { replace: true });
+  };
+
   return (
     <div className="flex min-h-screen bg-[#0A1736] text-white">
       {/* Sidebar */}
@@ -33,6 +51,15 @@ const AdminLayout = () => {
             </NavLink>
           ))}
         </nav>
+
+        {/* Logout Button */}
+        <button
+          onClick={handleLogout}
+          className="mt-auto flex items-center gap-3 p-2 rounded-lg bg-red-600 hover:bg-red-700 transition-all"
+        >
+          <LogOut size={18} />
+          <span>Logout</span>
+        </button>
       </aside>
 
       {/* Content */}

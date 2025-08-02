@@ -12,15 +12,12 @@ import ReportPage from "./pages/report/page/ReportPage";
 import SettingPage from "./pages/setting/page/SettingPage";
 import HomePage from "./pages/home/page/HomePage";
 import Dashboard from "./pages/home/page/HomePage";
+import RegisterKasirPage from "./pages/setting/page/RegisterKasirPage";
 
 const router = createBrowserRouter([
   {
-    path: "/login",
+    path: "/",
     element: <Login />,
-  },
-  {
-    path: "/register",
-    element: <Register />,
   },
   {
     path: "/admin",
@@ -54,11 +51,15 @@ const router = createBrowserRouter([
         path: "setting",
         element: <SettingPage />,
       },
+      { 
+        path: "register-kasir", 
+        element: <RegisterKasirPage /> 
+      },
     ],
   },
   {
     path: "*",
-    element: <Navigate to="/admin" replace />,
+    element: <Navigate to="/" replace />,
   },
 ]);
 
