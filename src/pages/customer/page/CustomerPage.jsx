@@ -52,45 +52,48 @@ const CustomerPage = () => {
 
   return (
     <div className="p-6">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Customer</h1>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-        >
-          Tambah Customer
-        </button>
-      </div>
-
-      <div className="overflow-x-auto text-black">
-        <table className="min-w-full bg-white border border-gray-200">
-          <thead>
-            <tr className="bg-gray-100 text-left">
-              <th className="p-3 border">Nama</th>
-              <th className="p-3 border">No HP</th>
-              <th className="p-3 border">Alamat</th>
-              <th className="p-3 border">Aksi</th>
+    {/* Header */}
+    <div className="flex justify-between items-center mb-6">
+      <h1 className="text-3xl font-semibold text-white">Pelanggan</h1>
+      <button
+        onClick={() => setIsModalOpen(true)}
+        className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
+      >
+        + Tambah Pelanggan
+      </button>
+    </div>
+  
+    {/* Table */}
+    <div className="overflow-x-auto rounded-lg shadow border border-gray-200 bg-white">
+      <table className="min-w-full text-sm text-gray-700">
+        <thead className="bg-gray-100 text-gray-700 text-left uppercase text-xs tracking-wider">
+          <tr>
+            <th className="p-4 border-b">Nama</th>
+            <th className="p-4 border-b">No HP</th>
+            <th className="p-4 border-b">Alamat</th>
+            <th className="p-4 border-b">Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          {customers.map((customer) => (
+            <tr key={customer.id} className="hover:bg-gray-50 transition">
+              <td className="p-4 border-b">{customer.name}</td>
+              <td className="p-4 border-b">{customer.phone}</td>
+              <td className="p-4 border-b">{customer.address}</td>
+              <td className="p-4 border-b">
+                <button
+                  onClick={() => handleDelete(customer.id)}
+                  className="px-3 py-1.5 bg-red-500 text-white rounded-md hover:bg-red-600 text-xs transition"
+                >
+                  Hapus
+                </button>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {customers.map((customer) => (
-              <tr key={customer.id} className="hover:bg-gray-50">
-                <td className="p-3 border">{customer.name}</td>
-                <td className="p-3 border">{customer.phone}</td>
-                <td className="p-3 border">{customer.address}</td>
-                <td className="p-3 border">
-                  <button
-                    onClick={() => handleDelete(customer.id)}
-                    className="px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-                  >
-                    Hapus
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  
 
       <AddCustomerModal
         isOpen={isModalOpen}
