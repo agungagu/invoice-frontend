@@ -1,4 +1,4 @@
-import { Outlet, NavLink, useNavigate } from "react-router-dom";
+import { Outlet, NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   User,
   Bell,
@@ -23,10 +23,16 @@ const navItems = [
 
 const AdminLayout = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = () => {
-    localStorage.removeItem("token"); // atau panggil context logout()
+    localStorage.removeItem("token");
     navigate("/", { replace: true });
+  };
+
+  const getPageTitle = () => {
+    const current = navItems.find((item) => location.pathname.startsWith(item.path));
+    return current?.name || "Dashboard";
   };
 
   return (
@@ -41,10 +47,14 @@ const AdminLayout = () => {
               to={item.path}
               key={item.name}
               className={({ isActive }) =>
-                `flex items-center gap-3 p-2 rounded-lg transition-all ${
-                  isActive ? "bg-[#1D2E5F] font-semibold" : "hover:bg-[#1A254C]"
-                }`
+                [
+                  "flex items-center gap-3 p-2 rounded-lg transition-all",
+                  isActive
+                    ? "bg-[#1D2E5F] font-semibold"
+                    : "hover:bg-[#1A254C]",
+                ].join(" ")
               }
+              end={item.path === "/admin"} // Agar dashboard hanya aktif di /admin persis
             >
               {item.icon}
               <span>{item.name}</span>
@@ -66,7 +76,7 @@ const AdminLayout = () => {
       <main className="flex-1 p-6">
         {/* Topbar */}
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-2xl font-semibold">Dashboard</h1>
+          <h1 className="text-2xl font-semibold">{getPageTitle()}</h1>
           <div className="flex items-center gap-4">
             <Bell className="text-white" />
             <div className="flex items-center gap-2 bg-[#1D2E5F] px-3 py-2 rounded-full">

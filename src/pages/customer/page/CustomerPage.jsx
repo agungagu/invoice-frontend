@@ -64,10 +64,10 @@ const CustomerPage = () => {
     </div>
   
     {/* Table */}
-    <div className="overflow-x-auto rounded-lg shadow border border-gray-200 bg-white">
-      <table className="min-w-full text-sm text-gray-700">
-        <thead className="bg-gray-100 text-gray-700 text-left uppercase text-xs tracking-wider">
-          <tr>
+    <div className="overflow-x-auto rounded-[10px] shadow-md border-none">
+      <table className="min-w-full text-sm text-gray-700 bg-white rounded-[10px]">
+        <thead className="text-gray-700 text-left uppercase text-xs tracking-wider rounded-[10px]">
+          <tr className="bg-blue-950 text-white rounded-[10px]">
             <th className="p-4 border-b">Nama</th>
             <th className="p-4 border-b">No HP</th>
             <th className="p-4 border-b">Alamat</th>
@@ -77,10 +77,10 @@ const CustomerPage = () => {
         <tbody>
           {customers.map((customer) => (
             <tr key={customer.id} className="hover:bg-gray-50 transition">
-              <td className="p-4 border-b">{customer.name}</td>
-              <td className="p-4 border-b">{customer.phone}</td>
-              <td className="p-4 border-b">{customer.address}</td>
-              <td className="p-4 border-b">
+              <td className="p-4 border-b border-gray-300">{customer.name}</td>
+              <td className="p-4 border-b border-gray-300">{customer.phone}</td>
+              <td className="p-4 border-b border-gray-300">{customer.address}</td>
+              <td className="p-4 border-b border-gray-300">
                 <button
                   onClick={() => handleDelete(customer.id)}
                   className="px-3 py-1.5 bg-red-500 text-white rounded-md hover:bg-red-600 text-xs transition"
