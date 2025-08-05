@@ -36,9 +36,9 @@ const AdminLayout = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#0A1736] text-white">
+    <div className="flex h-screen bg-[#0A1736] text-white overflow-hidden">
       {/* Sidebar */}
-      <aside className="w-64 bg-[#0F1E46] p-6 flex flex-col gap-6">
+      <aside className="w-64 bg-[#0F1E46] p-6 flex flex-col gap-6 flex-shrink-0">
         <div className="text-2xl font-bold mb-8">👕 Clothy</div>
 
         <nav className="flex flex-col gap-3">
@@ -49,12 +49,10 @@ const AdminLayout = () => {
               className={({ isActive }) =>
                 [
                   "flex items-center gap-3 p-2 rounded-lg transition-all",
-                  isActive
-                    ? "bg-[#1D2E5F] font-semibold"
-                    : "hover:bg-[#1A254C]",
+                  isActive ? "bg-[#1D2E5F] font-semibold" : "hover:bg-[#1A254C]",
                 ].join(" ")
               }
-              end={item.path === "/admin"} // Agar dashboard hanya aktif di /admin persis
+              end={item.path === "/admin"}
             >
               {item.icon}
               <span>{item.name}</span>
@@ -72,10 +70,10 @@ const AdminLayout = () => {
         </button>
       </aside>
 
-      {/* Content */}
-      <main className="flex-1 p-6">
+      {/* Konten kanan (scrollable) */}
+      <div className="flex-1 h-screen overflow-y-auto p-6 hide-scrollbar">
         {/* Topbar */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex justify-between items-center mb-8 sticky top-0 z-10 bg-[#0A1736]">
           <h1 className="text-2xl font-semibold">{getPageTitle()}</h1>
           <div className="flex items-center gap-4">
             <Bell className="text-white" />
@@ -93,9 +91,9 @@ const AdminLayout = () => {
           </div>
         </div>
 
-        {/* Page Content */}
+        {/* Halaman konten */}
         <Outlet />
-      </main>
+      </div>
     </div>
   );
 };
