@@ -1,54 +1,103 @@
-import React, { useState, useEffect } from "react";
-import { fetchCustomers, createCustomer, deleteCustomer } from "../customerApi";
+// import React, { useState, useEffect } from "react";
+// import { fetchCustomers, createCustomer, deleteCustomer } from "../customerApi";
 import AddCustomerModal from "../components/AddCustomerModal";
+import { useCreateCustomer } from "../../../hooks/customer/useCreateCustomers";
+import { useCustomers } from "../../../hooks/customer/useCustomers";
+import { useState } from "react";
+import { useUpdateCustomer } from "../../../hooks/customer/useUpdateCustomer";
+import UpdateCustomerModal from "../components/UpdateCustomerModal";
+import { useDeleteCustomer } from "../../../hooks/customer/useDeletecustomer";
 
 const CustomerPage = () => {
-  const [customers, setCustomers] = useState([]);
+  // const loadCustomers = async () => {
+  //   try {
+  //     const response = await fetchCustomers();
+  
+  //     // Jika API mereturn { customers: [...] }
+  //     const data = Array.isArray(response)
+  //       ? response
+  //       : Array.isArray(response.customers)
+  //         ? response.customers
+  //         : [];
+  
+  //     setCustomers(data);
+  //   } catch (error) {
+  //     console.error("Gagal mengambil data pelanggan:", error);
+  //     setCustomers([]); // fallback agar .map tidak error
+  //   }
+  // };
+  
+
+  // useEffect(() => {
+  //   loadCustomers();
+  // }, []);
+
+  // const handleSave = async (newCustomer) => {
+  //   try {
+  //     await createCustomer(newCustomer);
+  //     setIsModalOpen(false); // Tutup modal setelah simpan
+  //     loadCustomers(); // Refresh data
+  //   } catch (error) {
+  //     console.error("Gagal menambah pelanggan:", error);
+  //   }
+  // };
+
+  // const handleDelete = async (id) => {
+  //   if (confirm("Yakin ingin menghapus customer ini?")) {
+  //     try {
+  //       await deleteCustomer(id);
+  //       loadCustomers();
+  //     } catch (error) {
+  //       console.error("Gagal menghapus pelanggan:", error);
+  //     }
+  //   }
+  // };
+
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [selectedCustomer, setSelectedCustomer] = useState(null)
 
-  const loadCustomers = async () => {
-    try {
-      const response = await fetchCustomers();
-  
-      // Jika API mereturn { customers: [...] }
-      const data = Array.isArray(response)
-        ? response
-        : Array.isArray(response.customers)
-          ? response.customers
-          : [];
-  
-      setCustomers(data);
-    } catch (error) {
-      console.error("Gagal mengambil data pelanggan:", error);
-      setCustomers([]); // fallback agar .map tidak error
-    }
-  };
-  
+  const { data: customers = [], isLoading, isError, error} = useCustomers();
+  const {mutateAsync: createCustomer, isPending: isCreating} = useCreateCustomer();
+  const {mutateAsync: updateCustomer, isPending: isUpdating} = useUpdateCustomer();
+  const {mutateAsync: deleteCustomer, isPending: isDeleting} = useDeleteCustomer();
 
-  useEffect(() => {
-    loadCustomers();
-  }, []);
 
-  const handleSave = async (newCustomer) => {
+
+  if (isLoading) return <div>Loading...</div>
+  if (isError) return <div>Error: {error.message}</div>
+  if (!customers) return <div>No customers found</div>
+
+  const addCustomer = async (newCustomer) => {
     try {
       await createCustomer(newCustomer);
-      setIsModalOpen(false); // Tutup modal setelah simpan
-      loadCustomers(); // Refresh data
+      setIsModalOpen(false)
     } catch (error) {
-      console.error("Gagal menambah pelanggan:", error);
+      console.error("Gagal menambah data customer: ", error)
     }
-  };
+  }
 
-  const handleDelete = async (id) => {
-    if (confirm("Yakin ingin menghapus customer ini?")) {
+  const handleUpdateCustomer = async (updateData) => {
       try {
-        await deleteCustomer(id);
-        loadCustomers();
+        await updateCustomer(updateData);
+        setIsUpdateModalOpen(false)
+        setSelectedCustomer(null)
       } catch (error) {
-        console.error("Gagal menghapus pelanggan:", error);
+        console.error("Gagal mengubah data : ", error)
+      }
+  }
+
+  const handleDelete = async (customer) => {
+    if (confirm(`Yakin ingin menghapus data ${customer.name}?`)){
+      try {
+        await deleteCustomer(customer.id)
+      } catch (error) {
+        console.error("Gagal delete data")
       }
     }
-  };
+  }
+
 
   return (
     <div className="p-6">
@@ -82,7 +131,17 @@ const CustomerPage = () => {
               <td className="p-4 border-b border-gray-300">{customer.address}</td>
               <td className="p-4 border-b border-gray-300">
                 <button
-                  onClick={() => handleDelete(customer.id)}
+                  // onClick={() => handleDelete(customer.id)}
+                  onClick={() => {
+                    setSelectedCustomer(customer)
+                    setIsUpdateModalOpen(true)
+                  }}
+                  className="px-3 py-1.5 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 text-xs transition"
+                >
+                  Edit
+                </button>
+                <button
+                   onClick={() => handleDelete(customer)}
                   className="px-3 py-1.5 bg-red-500 text-white rounded-md hover:bg-red-600 text-xs transition"
                 >
                   Hapus
@@ -98,8 +157,18 @@ const CustomerPage = () => {
       <AddCustomerModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onSave={handleSave}
+        onSave={addCustomer}
       />
+
+<UpdateCustomerModal
+  isOpen={isUpdateModalOpen}
+  onClose={() => {
+    setIsUpdateModalOpen(false);
+    setSelectedCustomer(null);
+  }}
+  customer={selectedCustomer}
+  onSave={handleUpdateCustomer}
+/>
     </div>
   );
 };

@@ -10,6 +10,11 @@ export const createCustomer = async (data) => {
   return res.data;
 };
 
+export const updateCustomer = async (data) => {
+  const res = await axios.put(`/customer/update/${data.id}`, data)
+  return res.data;
+} 
+
 export const deleteCustomer = async (id) => {
   const res = await axios.delete(`/customer/delete/${id}`);
   return res.data;
