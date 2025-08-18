@@ -10,14 +10,21 @@ import InvoicePage from "./pages/invoice/page/InvoicePage";
 import ProductPage from "./pages/product/page/ProductPage";
 import ReportPage from "./pages/report/page/ReportPage";
 import SettingPage from "./pages/setting/page/SettingPage";
-import HomePage from "./pages/home/page/HomePage";
-import Dashboard from "./pages/home/page/HomePage";
 import RegisterKasirPage from "./pages/setting/page/RegisterKasirPage";
+import Dashboard from "./pages/home/page/HomePage";
 
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <Navigate to="/login" replace />,
+  },
+  {
+    path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
   },
   {
     path: "/admin",
@@ -27,39 +34,23 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     ),
     children: [
-      {
-        index: true,
-        element: <Dashboard />,
-      },
-      {
-        path: "customer",
-        element: <CustomerPage />,
-      },
-      {
-        path: "invoice",
-        element: <InvoicePage />,
-      },
-      {
-        path: "product",
-        element: <ProductPage />,
-      },
-      {
-        path: "report",
-        element: <ReportPage />,
-      },
+      { index: true, element: <Dashboard /> },
+      { path: "customer", element: <CustomerPage /> },
+      { path: "invoice", element: <InvoicePage /> },
+      { path: "product", element: <ProductPage /> },
+      { path: "report", element: <ReportPage /> },
       {
         path: "setting",
-        element: <SettingPage />,
-      },
-      { 
-        path: "register-kasir", 
-        element: <RegisterKasirPage /> 
+        children: [
+          { index: true, element: <SettingPage /> },
+          { path: "register-kasir", element: <RegisterKasirPage /> },
+        ],
       },
     ],
   },
   {
     path: "*",
-    element: <Navigate to="/" replace />,
+    element: <Navigate to="/login" replace />,
   },
 ]);
 
